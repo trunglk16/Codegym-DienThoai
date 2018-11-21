@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .display-none{
+            display:none;
+        }
+        .nokia{
+
+        }
+
+        .iphone{
+
+        }
+        /*.button{*/
+            /*position: absolute;*/
+            /*background-color: aliceblue;*/
+            /*border-radius: 10%;*/
+            /*width: 150px;*/
+            /*height: 60px;*/
+            /*box-shadow: 0 5px 10px rgba(0,0,40,0.03);*/
+
+            /*cursor: pointer;*/
+        /*.center;*/
+
+
+        /*}*/
+    </style>
+</head>
+<body>
+<center>
+<table>
+<td width="50%"><input id="button1" type="button" onclick="checkStatus(nokia);" value="PowerNokia"/></td>
+<td width="50%"><input id="button2" type="button" onclick="checkStatus(iphone);" value="PowerIphone"/></td>
+</table>
+
+<table>
+    <td>
+<table class="nokia" id="IndexNokia" border="1" cellspacing="0" cellpadding="5" style="position: relative">
+    <tr >
+       <td width="50%">
+
+        <h1 style="text-align: center">NOKIA</h1>
+           <h6 style="text-align: right">BATTERY: <span id="batNokia"></span></h6>
+       <br>
+         <input type="text"  id="textNokia">
+        <input class = "button" type="button" id="sendNokia" onclick="sendNokia();" value="Send"/>
+        <input class = "button" type="button" id="showNokia" onclick="showNokia();" value="Show"/>
+         <input class = "button"  type="button" id="chargeNokia" onclick="chargeNokia();" value="Charge"/>
+        <!--<p>BATTERY: <span id="batNokia"></span></p>-->
+    </tr>
+     <tr>
+            <!--<td><div style="width:1px;" >Inbox</div></td>-->
+            <td><div style="height:250px;width:100%;" id="inboxNokia"></div></td>
+     </tr>
+
+</table>
+    </td>
+    <td>
+<table class="iphone" id="IndexIphone" border="1" cellspacing="0" cellpadding="5" style="position: relative">
+    <td width=" 50%">
+
+        <h1 style="text-align: center">IPHONE</h1>
+        <h6 style="text-align: right">BATTERY: <span id="batIphone"></span></h6>
+        <br>
+        <input type="text" id="textIphone">
+        <input class = "button"  type="button" id="sendIphone" onclick="sendIphone();" value="Send"/>
+        <input class = "button"  type="button" id="showIphone" onclick="showIphone();" value="Show"/>
+        <input  class = "button" type="button"  onclick="chargeIphone();" value="Charge"/>
+        <!--<p>BATTERY: <span id="batIphone"></span></p>-->
+    </td>
+    <tr>
+        <td height="250" ><div style="width:100%;" id="inboxIphone"></div></td>
+    </tr>
+    </td>
+</table>
+</table>
+</center>
+<script>
+
+    var inboxN = new Array();
+    var inboxI = new Array();
+    function checkStatus(object) {
+         if(object === nokia) {
+            console.log("ts")
+            if (object.status === "on") {
+                document.getElementById('IndexNokia').classList.add('display-none');
+                object.status = "off"
+
+            } else {
+                document.getElementById('IndexNokia').classList.remove('display-none');
+                object.status = "on"
+            }
+        }
+        if(object === iphone){
+            console.log("ts")
+            if (object.status === "on") {
+                document.getElementById('IndexIphone').classList.add('display-none');
+                object.status = "off"
+
+            } else {
+                document.getElementById('IndexIphone').classList.remove('display-none');
+                object.status = "on"
+            }
+        }
+    }
+
+
+    // inboxN = document.getElementById("inboxNokia").value;
+    var Mobile = function (name,battery,status) {
+        this.status = status;
+        this.name = name;
+        this.battery = battery;
+        this.infoBattery = this.battery;
+        this.getbattery = function () {
+            this.battery++;
+
+        }
+        this.charge = function () {
+
+
+            if (this.battery <100){
+               this.battery++;
+                batNokia();
+                batIphone();
+            }else{
+                alert("Battery full");
+            }
+        }
+        var name;
+        this.inbox = function () {
+            if (name === "nokia") {
+
+                document.getElementById("inboxNokia").innerHTML = "";
+                for (var i = 0; i < inboxN.length; i++) {
+                    document.getElementById("inboxNokia").innerHTML += inboxN[i] + "<br>";
+                }
+            }
+            if (name === "iphone") {
+                document.getElementById("inboxIphone").innerHTML = "";
+                for (var i = 0; i < inboxI.length; i++) {
+                    document.getElementById("inboxIphone").innerHTML += inboxI[i] + "<br>";
+                }
+            }
+        };
+        this.sendMess = function () {
+            if (this.battery > 0) {
+                if (name === "nokia") {
+                    let message = document.getElementById("textNokia").value;
+                    if (message === "") {
+                        alert("Nhap noi dung de gui")
+                    } else {
+                        inboxI.push(message);
+                        this.battery--;
+                        document.getElementById("batNokia").innerHTML = nokia.battery;
+                    }
+
+                }
+                if (name === "iphone") {
+                    let message = document.getElementById("textIphone").value;
+                    if (message === "") {
+                        alert("Nhap noi dung de gui")
+                    } else {
+
+                        inboxN.push(message);
+                        this.battery--;
+                        document.getElementById("batIphone").innerHTML = iphone.battery;
+
+                    }
+                }
+            }else {
+                    alert("Xac them pin de su dung")
+                }
+
+
+
+        }
+    }
+
+
+
+    var nokia = new Mobile("nokia",10,"on");
+    var iphone = new Mobile("iphone",100,"on");
+    function batNokia() {
+        document.getElementById("batNokia").innerHTML = nokia.battery ;
+
+    }
+    function batIphone() {
+        document.getElementById("batIphone").innerHTML = iphone.battery;
+
+    }
+
+
+    function sendNokia() {
+        nokia.sendMess();
+        console.log(nokia.battery)
+
+    }
+    function sendIphone() {
+        iphone.sendMess();
+        console.log(iphone.battery);
+
+    }
+    function showNokia() {
+        nokia.inbox()
+
+    }
+    function showIphone() {
+        iphone.inbox()
+    }
+    function chargeNokia() {
+        nokia.charge()
+    }
+    function chargeIphone() {
+        iphone.charge()
+    }
+    batIphone();
+    batNokia();
+
+</script>
+</body>
+</html>
